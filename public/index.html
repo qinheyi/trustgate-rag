@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>TrustGate — a trust layer for RAG support bots, built on Clocked</title>
+  <meta name="description" content="Guard retrieved passages against prompt injection, rerank them, resolve conflicting policies, verify every sentence of the answer and scrub personal data — with Clocked." />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%2310b981'/><path d='M9 16l5 5 9-10' stroke='white' stroke-width='3.5' fill='none' stroke-linecap='round'/></svg>" />
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header class="top">
+    <div class="brand">
+      <div class="logo">✓</div>
+      <div>
+        <h1>TrustGate</h1>
+        <p class="tag">A trust layer between retrieval and your support bot's reply — powered by <a href="https://clocked.rezolve.ai" target="_blank" rel="noopener">Clocked</a></p>
+      </div>
+    </div>
+    <div id="modeBadge" class="badge">…</div>
+  </header>
+
+  <div id="banner" class="banner hidden" role="status"></div>
+
+  <main>
+    <section class="panel" id="inputPanel">
+      <div class="panel-head">
+        <h2><span class="num">1</span> Customer question &amp; retrieved passages</h2>
+        <div id="scenarioTabs" class="tabs"></div>
+      </div>
+      <p id="scenarioBlurb" class="muted"></p>
+      <label class="lbl" for="question">Customer message</label>
+      <textarea id="question" rows="3"></textarea>
+      <label class="lbl">Retrieved passages <span class="muted">(what your retriever returned — untrusted)</span></label>
+      <div id="docs" class="docs"></div>
+      <div class="row">
+        <button id="addDoc" class="ghost hidden">+ Add passage</button>
+        <span id="editNote" class="muted small"></span>
+        <span class="spacer"></span>
+        <button id="run" class="primary">Run through TrustGate →</button>
+      </div>
+    </section>
+
+    <section id="flow" class="flow hidden" aria-label="TrustGate flow"></section>
+
+    <section id="results" class="hidden">
+      <div class="panel final" id="finalPanel"></div>
+      <div class="grid">
+        <div class="panel" id="stageProtectIn"></div>
+        <div class="panel" id="stageGuard"></div>
+        <div class="panel wide" id="stageRerank"></div>
+        <div class="panel wide" id="stageCompare"></div>
+        <div class="panel wide" id="stageVerify"></div>
+        <div class="panel wide" id="stageProtectOut"></div>
+        <div class="panel wide" id="stageRaw"></div>
+      </div>
+    </section>
+
+    <section class="panel how">
+      <h2>How it works</h2>
+      <ol class="how-list">
+        <li><b>Pipeline #1</b> — one Clocked <code>/pipeline</code> request: <b>Protect</b> (<code>pii</code>) masks the customer's personal data before it reaches the LLM; <b>Guard</b> (<code>injection</code>, <code>source:"content"</code>) screens every retrieved passage and quarantines poisoned ones; <b>Rerank</b> says use / expand / skip per passage and answers a <b>Decide</b>-style <i>coverage</i> question; <b>Compare</b> finds passages that contradict each other so the outdated one is dropped.</li>
+        <li>The LLM drafts a reply <b>only</b> from the passages TrustGate kept (or the bot hands off to a person when coverage is <i>not_established</i>).</li>
+        <li><b>Pipeline #2</b>: <b>Verify</b> (<code>grounding</code>) checks every sentence of the draft against the kept passages, and <b>Protect</b> catches personal data the draft copied from internal notes. Only supported, PII-free sentences are sent; everything else goes to the agent-review list.</li>
+      </ol>
+      <p class="muted small">Every Clocked output on this page changes what the bot does. All content is synthetic (fictional company “Northwind Cloud”). Source: <a href="https://github.com/qinheyi/trustgate-rag" target="_blank" rel="noopener">github.com/qinheyi/trustgate-rag</a> · MIT.</p>
+    </section>
+  </main>
+  <script type="module" src="/app.js"></script>
+</body>
+</html>
