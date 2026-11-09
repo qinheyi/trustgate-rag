@@ -160,12 +160,13 @@ function renderFinal(trace) {
 }
 
 function renderProtectIn(input, pre) {
+  // pre.mode is "handoff" when no draft will be generated
   const el = $("#stageProtectIn");
   if (!pre) { el.innerHTML = ""; return; }
   const ents = pre.questionPii?.entities || [];
   el.innerHTML = `<h2><span class="num">P</span> Protect · question <code>/pii</code>${sampleTag()}</h2>
     <div class="src">${highlight(input.question, ents.map((e) => ({ start: e.start, end: e.end, cls: "pii", label: e.type, title: `confidence ${e.confidence}` })))}</div>
-    <h3>Sent to the LLM instead</h3><div class="src">${esc(pre.maskedQuestion ?? "(masking failed — nothing sent)")}</div>`;
+    <h3>${pre.mode === "handoff" ? "Masked copy (no draft was generated)" : "Sent to the LLM instead"}</h3><div class="src">${esc(pre.maskedQuestion ?? "(masking failed — nothing sent)")}</div>`;
 }
 
 function renderGuard(input, pre) {

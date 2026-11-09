@@ -15,6 +15,10 @@ cut a sentence, or send.
 
 ![flow](docs/flow.svg)
 
+![TrustGate demo run: poisoned forum post quarantined, outdated policy dropped, invented credit and leaked contact cut](docs/screenshot.png)
+
+*Screenshot of the demo-mode run (sample responses).*
+
 ## What each Clocked endpoint does in TrustGate
 
 | Step | Endpoint | Input | What its output changes |
